@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { API_URL } from '../constants.js';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || API_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -74,7 +75,7 @@ export async function fetchSales(params = {}) {
     if (error.response) {
       throw new Error(error.response.data?.message || `Server error: ${error.response.status}`);
     } else if (error.request) {
-      throw new Error('Cannot connect to server. Please ensure the backend is running on http://localhost:3001');
+      throw new Error('Cannot connect to server. Please check your network connection.');
     } else {
       throw error;
     }
@@ -93,7 +94,7 @@ export async function fetchFilterOptions() {
     if (error.response) {
       throw new Error(error.response.data?.message || `Server error: ${error.response.status}`);
     } else if (error.request) {
-      throw new Error('Cannot connect to server. Please ensure the backend is running on http://localhost:3001');
+      throw new Error('Cannot connect to server. Please check your network connection.');
     } else {
       throw error;
     }

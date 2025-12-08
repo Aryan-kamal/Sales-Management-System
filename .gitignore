@@ -6,6 +6,10 @@ yarn.lock
 # Generated files
 backend/src/data/sales.json
 
+# LibreOffice lock files
+**/.~lock.*
+**/*~
+
 # Environment variables
 .env
 .env.local

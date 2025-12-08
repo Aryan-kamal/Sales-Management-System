@@ -1,13 +1,22 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import salesRoutes from './routes/sales.routes.js';
-import { preloadSalesData } from './services/sales.service.js';
+import { connectDB } from './config/db.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
+  credentials: true
+}));
 app.use(express.json());
 
 // Health check
@@ -23,23 +32,24 @@ app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   res.status(500).json({
     error: 'Internal server error',
-    message: err.message
+    message: err.message,
   });
 });
 
-// Pre-load data on startup, then start server
-preloadSalesData()
-  .then((data) => {
-    if (!data.length) {
-      console.error('Data pre-load finished but no records were loaded.');
-    }
-  })
-  .catch((error) => {
-    console.error('Error pre-loading data:', error);
-  })
-  .finally(() => {
-    app.listen(PORT, () => {
-      // Server ready
-    });
-  });
+const startServer = async () => {
+  try {
+    // Connect to MongoDB first
+    await connectDB();
+    console.log('MongoDB connected');
 
+    // Start server only after DB connection is successful
+    app.listen(PORT, () => {
+      console.log(`Server listening on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+startServer();

@@ -23,27 +23,30 @@ export async function getSalesController(req, res) {
       pageSize
     } = req.query;
     
-    // Parse query parameters
+    const toArray = (val) => {
+      if (!val) return [];
+      if (Array.isArray(val)) return val;
+      return String(val).split(',').map((v) => v.trim()).filter(Boolean);
+    };
+
     const params = {
       search: search || undefined,
-      region: region ? (Array.isArray(region) ? region : [region]) : undefined,
-      gender: gender ? (Array.isArray(gender) ? gender : [gender]) : undefined,
+      region: toArray(region),
+      gender: toArray(gender),
       ageMin: ageMin || undefined,
       ageMax: ageMax || undefined,
-      category: category ? (Array.isArray(category) ? category : [category]) : undefined,
-      tags: tags ? (Array.isArray(tags) ? tags : [tags]) : undefined,
-      paymentMethod: paymentMethod ? (Array.isArray(paymentMethod) ? paymentMethod : [paymentMethod]) : undefined,
+      category: toArray(category),
+      tags: toArray(tags),
+      paymentMethod: toArray(paymentMethod),
       dateFrom: dateFrom || undefined,
       dateTo: dateTo || undefined,
       sortBy: sortBy || 'date',
       sortOrder: sortOrder || (sortBy === 'date' ? 'desc' : 'asc'),
-      page: page ? parseInt(page) : 1,
-      pageSize: pageSize ? parseInt(pageSize) : 10
+      page: page ? parseInt(page, 10) : 1,
+      pageSize: pageSize ? parseInt(pageSize, 10) : 10
     };
-    
-    // Get sales data
+
     const result = await getSales(params);
-    
     res.json(result);
   } catch (error) {
     console.error('Error in getSalesController:', error);
