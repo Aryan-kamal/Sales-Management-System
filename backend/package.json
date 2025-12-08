@@ -1,0 +1,20 @@
+{
+  "name": "sales-management-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Retail Sales Management System",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --max-old-space-size=4096 src/index.js",
+    "dev": "node --watch --max-old-space-size=4096 src/index.js",
+    "convert-csv": "node --max-old-space-size=4096 src/utils/convertCsvToJson.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "stream-json": "^1.9.1"
+  }
+}
