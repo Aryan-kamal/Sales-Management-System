@@ -14,7 +14,7 @@ app.use(
 	cors({
 		origin: [
 			"http://localhost:3000",
-			"https://sales-management-system-nine-psi.vercel.app/",
+			"https://sales-management-system-nine-psi.vercel.app",
 		].filter(Boolean),
 		credentials: true,
 	})
